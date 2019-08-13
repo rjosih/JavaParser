@@ -1,0 +1,34 @@
+package root;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public final class MainParser {
+	final static String FILE_NAME = "input_5";
+	final static String OUTPUT_FILE_NAME = FILE_NAME + "(1)";
+	public static int counter = 0;
+
+	public static void main(String... args) throws IOException {
+		MainParser binary = new MainParser();
+		byte[] bytes = binary.readFile(FILE_NAME);
+
+		String output = ParseData.parseByteArray(bytes);
+		writeSmallBinaryFile(output, OUTPUT_FILE_NAME);
+		System.out.println("Done parsing");
+	}
+
+	byte[] readFile(String fileName) throws IOException {
+		Path path = Paths.get(fileName);
+		return Files.readAllBytes(path);
+	}
+
+	static void writeSmallBinaryFile(String output, String fileName) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+		writer.write(output);
+		writer.close();
+	}
+}

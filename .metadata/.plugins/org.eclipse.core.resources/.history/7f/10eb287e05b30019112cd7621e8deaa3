@@ -1,0 +1,38 @@
+package root;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public final class MainParser {
+	final static String FILE_NAME = "C:\\Users\\rjosi\\OneDrive\\Dokument\\Sinch\\ParserJava\\input_3";
+	final static String OUTPUT_FILE_NAME = "out.bin";
+  
+  public static void main(String... args) throws IOException {
+    MainParser binary = new MainParser();
+    byte[] bytes = binary.readSmallBinaryFile(FILE_NAME);
+    binary.writeSmallBinaryFile(bytes, OUTPUT_FILE_NAME);
+    
+    System.out.println("Originial bytes : ");
+    System.out.println(bytes);
+
+    String stringFormat = new String(bytes); 
+    parse(stringFormat);
+  }
+ 
+  private static void parse(String stringFormat) {
+    System.out.println("Bytes decrypted : ");
+    System.out.println(stringFormat);	
+}
+
+byte[] readSmallBinaryFile(String fileName) throws IOException {
+    Path path = Paths.get(fileName);
+    return Files.readAllBytes(path);
+  }
+  
+  void writeSmallBinaryFile(byte[] bytes, String fileName) throws IOException {
+    Path path = Paths.get(fileName);
+    Files.write(path, bytes); //creates, overwrites
+  }
+}  

@@ -1,0 +1,55 @@
+package root;
+
+import java.io.*;
+
+public class MainParser {
+	public static void main(String[] pArgs) throws FileNotFoundException, IOException {
+		//		String fileName = "C:\\Users\\rjosi\\OneDrive\\Dokument\\Sinch\\ParserJava\\result_4";
+		//		File file = new File(fileName);
+		//		readBinaryFile(file);
+		//	}
+		//
+		//	private static void readBinaryFile(File file) throws FileNotFoundException, IOException {
+		//		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+		//			int singleCharInt;
+		//			char singleChar;
+		//
+		//			while ((singleCharInt = fileInputStream.read()) != -1) {
+		//				singleChar = (char) singleCharInt;
+		//				System.out.print(singleChar);
+		//			}
+		//		}
+		String fileName = "input_4";
+//		try {
+//			FileOutputStream fileOs = new FileOutputStream(fileName);
+//			ObjectOutputStream os = new ObjectOutputStream(fileOs);
+//			os.writeInt(2048);
+//			os.writeDouble(3.1415);
+//			os.close();
+//		}catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		}catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println("Done writing " + fileName);
+		try {
+			FileInputStream fileIs = new FileInputStream(fileName);
+			ObjectInputStream is = new ObjectInputStream(fileIs);
+			try {
+				Object i = is.readObject();
+				System.out.println(i);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			int x = is.readInt();
+//			double d = is.readDouble();
+			System.out.println(d);
+			is.close();
+		}catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

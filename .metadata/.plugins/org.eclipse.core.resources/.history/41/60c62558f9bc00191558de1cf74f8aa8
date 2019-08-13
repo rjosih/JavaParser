@@ -1,0 +1,42 @@
+package root;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public final class MainParser {
+	final static String FILE_NAME = "input_5";
+	final static String OUTPUT_FILE_NAME = FILE_NAME + "(1)";
+	static ParseData parseData;
+
+	public static void main(String... args) throws IOException {
+		MainParser binary = new MainParser();
+		byte[] bytes = binary.readSmallBinaryFile(FILE_NAME);
+		String output = parseData.parseByteArray(bytes);
+		writeNewFile(output, OUTPUT_FILE_NAME);
+		System.out.println(output);
+		System.out.println("Parsed done");
+	}
+
+	private byte[] readSmallBinaryFile(String fileName) throws IOException {
+		Path path = Paths.get(fileName);
+		byte[] file = Files.readAllBytes(path);
+		return file;
+	}
+
+	private static void writeNewFile(String output, String outPutFileName) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(outPutFileName));
+		writer.write(output);
+		writer.close();
+	}
+	
+}

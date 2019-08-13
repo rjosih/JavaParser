@@ -1,0 +1,263 @@
+package root;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
+
+public final class Parser {
+	final static String FILE_NAME = "input_5";
+	final static String OUTPUT_FILE_NAME = "newfile.bin";
+
+
+	public static void main(String... args) throws IOException {
+		Parser binary = new Parser();
+		byte[] bytes = binary.readSmallBinaryFile(FILE_NAME);
+        int cursor = 0;
+        parseByteArray(bytes, cursor);
+	    binary.writeSmallBinaryFile(bytes, OUTPUT_FILE_NAME);
+	}
+
+    private static void parseByteArray(byte[] bytes, int cursor) {
+       
+        Dictionary<String, String> dict = new Hashtable<String, String>();
+        byte noOfElem = bytes[5];
+        
+        cursor += 6;
+
+        for (int i=0; i< noOfElem; i++){
+            
+            String key;
+            
+            // find key
+            if (checkIfString(bytes[cursor])){
+                cursor++;
+        
+                key = "\'";
+                
+                while (bytes[cursor] != 0){
+                    key += (char) bytes[i];
+                    cursor++;
+                }
+                
+                key += "\'";
+                // System.out.println("key#" + Integer.toString(i+1) + ": " + key);
+            }
+            
+            else if (checkIfNumber(bytes[cursor])){
+                cursor += 4;
+        
+                key = Integer.toString((int) bytes[cursor]);
+                cursor++;
+
+            }
+            
+            else {
+                key = "NULL";
+                System.out.println("Something is wrong in finding key#" + Integer.toString(i+1));
+                break;
+            }
+            
+            System.out.print("key#" + Integer.toString(i+1) + ": " + key + "\t");
+            
+            // find value
+
+            String value;
+            if (checkIfString(bytes[cursor])) {
+                cursor++;
+        
+                value = "\'";
+                
+                while (bytes[cursor] != 0){
+                    value += (char) bytes[i];
+                    cursor++;
+                }
+
+                value += "\'";
+            }
+            
+            else if (checkIfNumber(bytes[cursor])) {
+                cursor += 4;
+        
+                value = Integer.toString((int) bytes[cursor]);
+                cursor++;
+            }
+            
+            else if (checkIfList(bytes[cursor])) {
+                
+                List list = new ArrayList();
+                    
+
+
+                cursor += 5;
+                int noOfItems = (int) bytes[cursor];
+                // System.out.println("Number of items in list: " + Integer.toString(noOfItems));
+                
+                for (int k=0; k<noOfItems; k++){
+                    
+                    cursor++;
+                    
+                    String item;
+                    if (checkIfString(bytes[cursor])) {
+                        cursor++;
+        
+                    item = "\'";
+                
+                    while (bytes[cursor] != 0){
+                        item += (char) bytes[i];
+                        cursor++;
+                    }
+
+                    item += "\'";
+
+
+
+                }
+            
+            else if (checkIfNumber(bytes[cursor])) {
+                cursor += 4;
+        
+                item = Integer.toString((int) bytes[cursor]);
+                cursor++;
+            }
+                    
+                    list.add(item);
+                }
+                System.out.println(list);
+                
+            }
+            
+            else if (checkIfDictionary(bytes[cursor])) {
+                parseByteArray(bytes, cursor);
+            }
+
+            else {
+                value = "NULL";
+                System.out.println("Something is wrong in finding value#" + Integer.toString(i+1));
+                break;
+            }
+            
+            System.out.println("value#" + Integer.toString(i+1) + ": " + value.toString());
+            
+            // add key, value to dictionary
+            dict.put(key, value);
+        }
+
+    //print dict;
+
+
+    boolean checkIfString(byte b){
+        if (b == 2)
+            return true;
+    }
+    
+    // String handleStringAt(int cursor){
+        
+    // }
+
+    boolean checkIfNumber(byte b){
+        if (b == 1)
+            return true;
+    }
+    // int handleNumberAt(int cursor){
+        
+    // }
+
+    boolean checkIfList(byte b){
+        if (b == 5)
+            return true;
+    }
+    boolean checkIfDictionary(byte b){
+        if (b == 6)
+            return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+            
+            
+            
+        
+        
+        
+        
+        // for (int i = 0; i < bytes.length; i++) {
+            
+        //     if (bytes[i] == 5){
+                
+        //         List list = new ArrayList();
+                
+        //         int noOfElem = (int) bytes[i+5];
+        //         System.out.println("Number of elems in list: " + Integer.toString(noOfElem));
+                
+        //         if (bytes[i+6] == 6)
+        //             System.out.println("List of dictionaries");
+
+        //     }
+
+        //     if (bytes[i] == 6){
+
+        //         Dictionary dict = new Hashtable();
+                
+        //         int noOfElem = (int) bytes[i+5];
+        //         System.out.println("Number of elems in dictionary: " + Integer.toString(noOfElem));
+
+        //     }
+            
+        //     if (bytes[i] == 2){
+        //         i++;
+        //         String sb = "\'";
+        //         while (bytes[i] != 0){
+        //             sb += (char) bytes[i];
+        //             i++;
+        //         }
+        //         sb += "\'";
+        //         System.out.println(sb);
+        //     }
+
+        //     if (bytes[i] == 1){
+        //         i += 4;
+        //         int numb = (int) bytes[i];
+        //         System.out.println(numb);
+        //     }
+        // }
+	}
+
+	byte[] readSmallBinaryFile(String fileName) throws IOException {
+		Path path = Paths.get(fileName);
+		return Files.readAllBytes(path);
+	}
+	
+	void writeSmallBinaryFile(byte[] bytes, String fileName) throws IOException {
+		    Path path = Paths.get(fileName);
+		    Files.write(path, bytes); //creates, overwrites
+		  }
+}

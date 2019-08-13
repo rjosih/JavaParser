@@ -1,0 +1,62 @@
+package root;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public final class MainParser {
+	final static String FILE_NAME = "C:\\Users\\rjosi\\OneDrive\\Dokument\\Sinch\\ParserJava\\input_3";
+	final static String OUTPUT_FILE_NAME = "newfile.bin";
+  
+  public static void main(String... args) throws IOException {
+    MainParser binary = new MainParser();
+    byte[] bytes = binary.readSmallBinaryFile(FILE_NAME);
+//    System.out.println(bytes);
+    printByteArray(bytes);
+    
+    binary.writeSmallBinaryFile(bytes, OUTPUT_FILE_NAME);
+
+    String stringFormat = new String(bytes, StandardCharsets.UTF_8); 
+//    parse(stringFormat);
+    
+
+
+  }
+ 
+  static void printByteArray(byte[] bytes) {
+	  for (int i = 0; i < bytes.length; i++) {
+	        switch(bytes[i]) {
+	            case 6:
+	                bytes[i] = (byte)'{';
+	                break;
+//	            case 1:
+//	                bytes[i] = (byte)'\n';
+//	                break;
+//	            case 5:
+//	                bytes[i] = (byte)'\t';
+//	                break;
+//	            case 2:
+//	                bytes[i] = (byte)'`';
+//	                break;
+	        }
+	        System.out.println("Char: " + (char)bytes[i] 
+	        		+ " Int: " + (int)bytes[i]
+	        				);
+	    }
+	}
+  private static void parse(String stringFormat) {
+    System.out.println(stringFormat);	
+}
+
+byte[] readSmallBinaryFile(String fileName) throws IOException {
+    Path path = Paths.get(fileName);
+    return Files.readAllBytes(path);
+  }
+  
+  void writeSmallBinaryFile(byte[] bytes, String fileName) throws IOException {
+    Path path = Paths.get(fileName);
+    Files.write(path, bytes); //creates, overwrites
+  }
+}  

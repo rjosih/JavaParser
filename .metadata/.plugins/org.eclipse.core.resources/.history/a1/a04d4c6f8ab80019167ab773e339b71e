@@ -1,0 +1,92 @@
+package root;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+public final class Parser {
+	final static String FILE_NAME = "input_5";
+	final static String OUTPUT_FILE_NAME = "newfile.bin";
+
+
+	public static void main(String... args) throws IOException {
+		Parser binary = new Parser();
+		byte[] bytes = binary.readSmallBinaryFile(FILE_NAME);
+//		printByteArray(bytes);
+        parseByteArray(bytes);
+
+	    binary.writeSmallBinaryFile(bytes, OUTPUT_FILE_NAME);
+	}
+
+    private static void parseByteArray(byte[] bytes) {
+        for (int i = 0; i < bytes.length; i++) {
+            
+            if (bytes[i] == 5){
+                
+                List list = new ArrayList();
+                int noOfElem = (int) bytes[i+5];
+                    System.out.println("Number of elems: " + Integer.toString(noOfElem));
+                if (bytes[i+6] == 6)
+                    System.out.println("List of dictionaries");
+
+            }
+            
+            if (bytes[i] == 2){
+                i++;
+                String sb = "\'";
+                while (bytes[i] != 0){
+                    sb += (char) bytes[i];
+                    i++;
+                }
+                sb += "\'";
+                System.out.println(sb);
+            }
+
+            if (bytes[i] == 1){
+                i += 4;
+                int numb = (int) bytes[i];
+                System.out.println(numb);
+            }
+        }
+	}
+
+	static void printByteArray(byte[] bytes) {
+		for (int i = 0; i < bytes.length; i++) {
+			switch (bytes[i]) {
+	            case 6:
+	                bytes[i] = (byte)'{';
+	                break;
+	            case 2:
+	            	bytes[i] = (byte)'\'';
+	            	break;
+	            case 5:
+	            	bytes[i] = (byte)'\'';
+	            	break;
+	            case 1:
+	                bytes[i] = (byte)'\n';
+	                break;
+	            case 4:
+	                bytes[i] = (byte)'$';
+	                break;
+	            case 3:
+	                bytes[i] = (byte)'#';
+	                break;
+			}
+//			System.out.println("Char: " + (char) bytes[i] + " Int: " + (int) bytes[i]);
+		}
+//		System.out.println(bytes.length);
+	}
+
+	byte[] readSmallBinaryFile(String fileName) throws IOException {
+		Path path = Paths.get(fileName);
+		return Files.readAllBytes(path);
+	}
+	
+	void writeSmallBinaryFile(byte[] bytes, String fileName) throws IOException {
+		    Path path = Paths.get(fileName);
+		    Files.write(path, bytes); //creates, overwrites
+		  }
+}

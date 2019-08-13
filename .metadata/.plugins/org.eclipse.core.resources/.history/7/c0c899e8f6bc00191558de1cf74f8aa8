@@ -1,0 +1,37 @@
+package root;
+
+public class CheckIdentifier {
+	 static boolean checkIfString(byte b){
+	        if (b == 2)
+	            return true;
+	        else
+	            return false;
+	    }
+	    
+	    static boolean checkIfNumber(byte b){
+	        if (b == 1)
+	            return true;
+	        else
+	            return false;
+	    }
+
+	    static boolean checkIfList(byte b){
+	        if (b == 5)
+	            return true;
+	        else
+	            return false;
+	    }
+	    static boolean checkIfDictionary(byte b){
+	        if (b == 6)
+	            return true;
+	        else
+	            return false;
+	    }
+		public static CheckIdentifier getCheckIdentifier() {
+			return getCheckIdentifier();
+		}
+
+		public static void setCheckIdentifier(CheckIdentifier checkIdentifier) {
+			MainParser.checkIdentifier = checkIdentifier;
+		}
+}

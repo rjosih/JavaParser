@@ -1,0 +1,190 @@
+package root;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public final class MainParser {
+	final static String FILE_NAME = "input_5";
+	final static String OUTPUT_FILE_NAME = FILE_NAME + "(1)";
+	public static int counter = 0;
+	ParseData parseData;
+	public static void main(String... args) throws IOException {
+		MainParser binary = new MainParser();
+		byte[] bytes = binary.readSmallBinaryFile(FILE_NAME);
+
+		String output = parseByteArray(bytes);
+		System.out.println(output);
+		writeSmallBinaryFile(output, OUTPUT_FILE_NAME);
+	}
+
+	private static String parseByteArray(byte[] bytes) {
+
+		LinkedHashMap<String, String> dict = new LinkedHashMap<String, String>();
+		byte noOfElem = bytes[counter + 5];
+
+		counter += 6;
+		// System.out.println("No of elements: " + Integer.toString(noOfElem));
+		for (int i = 0; i < noOfElem; i++) {
+			// System.out.println("Loop run #" + Integer.toString(i));
+			String key;
+
+			// find key
+			if (CheckIdentifier.checkIfString(bytes[counter])) {
+				counter++;
+
+				key = "\'";
+
+				while (bytes[counter] != 0) {
+					key += (char) bytes[counter];
+					counter++;
+				}
+				counter++;
+				key += "\'";
+				// System.out.println("key#" + Integer.toString(i+1) + ": " + key);
+			}
+
+			else if (CheckIdentifier.checkIfNumber(bytes[counter])) {
+				counter += 4;
+
+				key = Integer.toString((int) bytes[counter]);
+				counter++;
+
+			}
+
+			else {
+				key = "NULL";
+				System.out.println("Something is wrong in finding key#" + Integer.toString(i + 1));
+				System.out.println("counter position: " + Integer.toString(counter));
+				System.out.println("Byte at counter: " + bytes[counter]);
+			}
+
+			// System.out.print("key#" + Integer.toString(i+1) + ": " + key + "\t");
+
+			// find value
+
+			String value = null;
+			if (CheckIdentifier.checkIfString(bytes[counter])) {
+				counter++;
+
+				value = "\'";
+
+				while (bytes[counter] != 0) {
+					value += (char) bytes[counter];
+					counter++;
+				}
+				counter++;
+				value += "\'";
+			}
+
+			else if (CheckIdentifier.checkIfNumber(bytes[counter])) {
+				counter += 4;
+
+				value = Integer.toString((int) bytes[counter]);
+				counter++;
+			}
+
+			else if (CheckIdentifier.checkIfList(bytes[counter])) {
+
+				List<String> list = new ArrayList<String>();
+
+				counter += 5;
+				int noOfItems = (int) bytes[counter];
+				// System.out.println("Number of items in list: " +
+				// Integer.toString(noOfItems));
+
+				counter++;
+
+				for (int k = 0; k < noOfItems; k++) {
+
+					String item = null;
+					if (CheckIdentifier.checkIfString(bytes[counter])) {
+						counter++;
+
+						item = "\'";
+
+						while (bytes[counter] != 0) {
+							item += (char) bytes[i];
+							counter++;
+						}
+
+						item += "\'";
+					}
+
+					else if (CheckIdentifier.checkIfNumber(bytes[counter])) {
+						counter += 4;
+
+						item = Integer.toString((int) bytes[counter]);
+						// counter++;
+					}
+
+					else if (CheckIdentifier.checkIfDictionary(bytes[counter])) {
+						item = parseByteArray(bytes);
+					}
+
+					else {
+						System.out.println("Reached else statement in list#" + Integer.toString(k));
+					}
+
+					list.add(item);
+				}
+				value = list.toString();
+				// System.out.println(list);
+
+			}
+
+			else if (CheckIdentifier.checkIfDictionary(bytes[counter])) {
+				value = parseByteArray(bytes);
+			}
+
+			else {
+				value = "NULL";
+				System.out.println("Something is wrong in finding value#" + Integer.toString(i + 1));
+				System.out.println("counter position: " + Integer.toString(counter));
+				System.out.println("Byte at counter: " + bytes[counter]);
+			}
+
+			// System.out.println("value#" + Integer.toString(i+1) + ": " +
+			// value.toString());
+
+			// add key, value to dictionary
+			dict.put(key, value);
+		}
+		String out = "{" + "\n";
+		Set<?> set = dict.entrySet();
+		Iterator<?> it = set.iterator();
+		while (it.hasNext()) {
+			Map.Entry mentry = (Map.Entry) it.next();
+			out += "\t";
+			out += mentry.getKey();
+			out += ": ";
+			out += mentry.getValue();
+			out += ", ";
+			out += "\n";
+		}
+		out += "\t" + "}";
+		return out;
+	}
+
+	byte[] readSmallBinaryFile(String fileName) throws IOException {
+		Path path = Paths.get(fileName);
+		return Files.readAllBytes(path);
+	}
+
+	static void writeSmallBinaryFile(String output, String fileName) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+		writer.write(output);
+		writer.close();
+	}
+}

@@ -1,0 +1,22 @@
+package root;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class HandleFile {
+	
+	void writeSmallBinaryFile(String output) throws IOException {
+	    BufferedWriter writer = new BufferedWriter(new FileWriter("test"));
+	    writer.write(output);
+	     
+	    writer.close();
+	  }
+
+	public void getValue() {
+		return value;
+	}
+}

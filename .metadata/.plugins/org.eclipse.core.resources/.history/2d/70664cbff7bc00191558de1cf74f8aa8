@@ -1,0 +1,44 @@
+package root;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Scanner;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class test {
+
+	public static void main(String[] args) {
+		{ 
+			// pass the path to the file as a parameter 
+			File file = 
+					new File("input_5"); 
+			Scanner sc;
+			try {
+				sc = new Scanner(file);
+				
+				while (sc.hasNextLine()) 
+				{
+					String s=sc.nextLine();
+//					System.out.println(s);
+					String ss[]=s.split(" ");
+					JSONObject person = new JSONObject();
+					try {
+						person.put(ss[0], ss[1]);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println(person);
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+
+	}
+}

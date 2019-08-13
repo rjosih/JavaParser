@@ -1,0 +1,12 @@
+{
+    'first': 16777216,
+    'second': 'value for second',
+    'deep': {
+        1: 'integer as key',
+        'mix': 'it is possible to mix integers and strings',
+        2: {
+            4: 19088743
+        }
+    },
+    5: 25
+}
