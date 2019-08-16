@@ -13,7 +13,7 @@ public class ParseData {
 
 	public static String parseByteArray(byte[] bytes) {
 		LinkedHashMap<String, String> dict = new LinkedHashMap<String, String>();
-		byte numberOfElements = bytes[counter + bytes[0] - 1];
+		byte numberOfElements = bytes[counter+5];
 		counter += 6;
 //		 System.out.println("Number of elements: " + Integer.toString(numberOfElements));
 		for (int i = 0; i < numberOfElements; i++) {
@@ -22,10 +22,10 @@ public class ParseData {
 
 			// find key
 			if (CheckIdentifier.isString(bytes[counter])) {
+				
+				System.out.println("Test: " + bytes[counter]);
 				counter++;
-
 				key = "\'";
-
 				while (bytes[counter] != 0) {
 					key += (char) bytes[counter];
 					counter++;
@@ -33,16 +33,12 @@ public class ParseData {
 				counter++;
 				key += "\'";
 //				 System.out.println("key#" + Integer.toString(i+1) + ": " + key);
-			}
-
-			else if (CheckIdentifier.isInteger(bytes[counter])) {
+			} else if (CheckIdentifier.isInteger(bytes[counter])) {
 				counter += 4;
 				key = Integer.toString((int) bytes[counter]);
 				counter++;
 
-			}
-
-			else {
+			} else {
 				key = "NULL";
 				System.out.println("Something is wrong in finding key#" + Integer.toString(i + 1));
 				System.out.println("counter position: " + Integer.toString(counter));
@@ -63,15 +59,10 @@ public class ParseData {
 			}
 
 			else if (CheckIdentifier.isInteger(bytes[counter])) {
-				System.out.println(CheckIdentifier.isInteger(bytes[counter]));
 				counter += 4;
-				System.out.println(counter);
-
 				value = Integer.toString((int) bytes[counter]);
 				counter++;
-			}
-
-			else if (CheckIdentifier.isList(bytes[counter])) {
+			} else if (CheckIdentifier.isList(bytes[counter])) {
 				List<String> list = new ArrayList<String>();
 				counter += 5;
 				int numberOfItems = (int) bytes[counter];
@@ -80,44 +71,32 @@ public class ParseData {
 //				 Integer.toString(numberOfItems));
 
 				for (int k = 0; k < numberOfItems; k++) {
-
 					String item = null;
 					if (CheckIdentifier.isString(bytes[counter])) {
 						counter++;
-
 						item = "\'";
-
 						while (bytes[counter] != 0) {
 							item += (char) bytes[i];
 							counter++;
 						}
-
+						
 						item += "\'";
-					}
-
-					else if (CheckIdentifier.isInteger(bytes[counter])) {
+						
+					} else if (CheckIdentifier.isInteger(bytes[counter])) {
 						counter += 4;
 						item = Integer.toString((int) bytes[counter]);
-					}
-
-					else if (CheckIdentifier.isDictionary(bytes[counter])) {
+					} else if (CheckIdentifier.isDictionary(bytes[counter])) {
 						item = parseByteArray(bytes);
-					}
-
-					else {
+					} else {
 						System.out.println("Reached else statement in list#" + Integer.toString(k));
 					}
 
 					list.add(item);
 				}
 				value = list.toString();
-			}
-
-			else if (CheckIdentifier.isDictionary(bytes[counter])) {
+			} else if (CheckIdentifier.isDictionary(bytes[counter])) {
 				value = parseByteArray(bytes);
-			}
-
-			else {
+			} else {
 				value = "NULL";
 				System.out.println("Something is wrong in finding value#" + Integer.toString(i + 1));
 				System.out.println("counter position: " + Integer.toString(counter));
