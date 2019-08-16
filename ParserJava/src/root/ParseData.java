@@ -15,9 +15,7 @@ public class ParseData {
 		LinkedHashMap<String, String> dict = new LinkedHashMap<String, String>();
 		byte numberOfElements = bytes[counter+5];
 		counter += 6;
-//		 System.out.println("Number of elements: " + Integer.toString(numberOfElements));
 		for (int i = 0; i < numberOfElements; i++) {
-//			 System.out.println("Loop run #" + Integer.toString(i));
 			String key;
 
 			// find key
@@ -32,7 +30,6 @@ public class ParseData {
 				}
 				counter++;
 				key += "\'";
-//				 System.out.println("key#" + Integer.toString(i+1) + ": " + key);
 			} else if (CheckIdentifier.isInteger(bytes[counter])) {
 				counter += 4;
 				key = Integer.toString((int) bytes[counter]);
@@ -44,7 +41,6 @@ public class ParseData {
 				System.out.println("counter position: " + Integer.toString(counter));
 				System.out.println("Byte at counter: " + bytes[counter]);
 			}
-			// System.out.print("key#" + Integer.toString(i+1) + ": " + key + "\t");
 			// find value
 			String value = null;
 			if (CheckIdentifier.isString(bytes[counter])) {
@@ -67,8 +63,6 @@ public class ParseData {
 				counter += 5;
 				int numberOfItems = (int) bytes[counter];
 				counter++;
-//				 System.out.println("Number of items in list: " +
-//				 Integer.toString(numberOfItems));
 
 				for (int k = 0; k < numberOfItems; k++) {
 					String item = null;
@@ -102,9 +96,6 @@ public class ParseData {
 				System.out.println("counter position: " + Integer.toString(counter));
 				System.out.println("Byte at counter: " + bytes[counter]);
 			}
-
-//			 System.out.println("value#" + Integer.toString(i+1) + ": " +
-//			 value.toString());
 
 			// add key, value to dictionary
 			dict.put(key, value);
